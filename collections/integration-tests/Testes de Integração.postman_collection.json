@@ -1,0 +1,527 @@
+{
+	"info": {
+		"_postman_id": "18c4443d-8a29-4dc5-ad42-37e61d46220e",
+		"name": "Testes de Integração",
+		"description": "**O ServeRest é uma API REST gratuita que simula uma loja virtual com intuito de servir de material de estudos de testes de API.**\n\nEstes testes verificam a interação da API com outros sistemas ou serviços para garantir que funcionem de forma coesa.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38510210"
+	},
+	"item": [
+		{
+			"name": "Cancelar compra",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code é 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validar mensagem de sucesso\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Registro excluído com sucesso\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validação da estrutura de resposta - Cancelar um carrinho\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.be.an(\"object\");\r",
+							"    pm.expect(jsonData).to.have.property(\"message\").that.is.a(\"string\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "{{token}}",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/carrinhos/cancelar-compra",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"carrinhos",
+						"cancelar-compra"
+					]
+				},
+				"description": "Não é permitido excluir usuário com carrinho."
+			},
+			"response": [
+				{
+					"name": "Registro excluído com sucesso | Nenhum registro excluído",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "/localhost:3000/usuarios/:_id",
+							"path": [
+								"localhost:3000",
+								"usuarios",
+								":_id"
+							],
+							"variable": [
+								{
+									"key": "_id"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n  \"message\": \"<string>\"\n}"
+				},
+				{
+					"name": "Usuário com carrinho cadastrado",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/usuarios/:_id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"usuarios",
+								":_id"
+							],
+							"variable": [
+								{
+									"key": "_id"
+								}
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n  \"message\": \"<string>\",\n  \"idCarrinho\": \"<string>\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Excluir produto",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code é 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validar mensagem de sucesso\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Registro excluído com sucesso\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validação da estrutura de resposta - Exclusão de Produto\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.be.an(\"object\");\r",
+							"    pm.expect(jsonData).to.have.property(\"message\").that.is.a(\"string\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "{{token}}",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						},
+						{
+							"key": "in",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/produtos/{{idProduto}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"produtos",
+						"{{idProduto}}"
+					]
+				},
+				"description": "Não é permitido excluir produto que faz parte de carrinho."
+			},
+			"response": [
+				{
+					"name": "Registro excluído com sucesso | Nenhum registro excluído",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "<API Key>",
+								"description": "Added as a part of security scheme: apikey"
+							}
+						],
+						"url": {
+							"raw": "/localhost:3000/produtos/:_id",
+							"path": [
+								"localhost:3000",
+								"produtos",
+								":_id"
+							],
+							"variable": [
+								{
+									"key": "_id"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n  \"message\": \"<string>\"\n}"
+				},
+				{
+					"name": "Produto faz parte de carrinho",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "<API Key>",
+								"description": "Added as a part of security scheme: apikey"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/produtos/:_id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"produtos",
+								":_id"
+							],
+							"variable": [
+								{
+									"key": "_id"
+								}
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n  \"message\": \"<string>\",\n  \"idCarrinho\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}"
+				},
+				{
+					"name": "Token ausente, inválido ou expirado",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "<API Key>",
+								"description": "Added as a part of security scheme: apikey"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/produtos/:_id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"produtos",
+								":_id"
+							],
+							"variable": [
+								{
+									"key": "_id"
+								}
+							]
+						}
+					},
+					"status": "Unauthorized",
+					"code": 401,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n  \"message\": \"<string>\"\n}"
+				},
+				{
+					"name": "Rota exclusiva para administradores (`administrador = true`)",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "<API Key>",
+								"description": "Added as a part of security scheme: apikey"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/produtos/:_id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"produtos",
+								":_id"
+							],
+							"variable": [
+								{
+									"key": "_id"
+								}
+							]
+						}
+					},
+					"status": "Forbidden",
+					"code": 403,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n  \"message\": \"<string>\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Concluir compra",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code é 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validar mensagem de sucesso\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Registro excluído com sucesso\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validação da estrutura de resposta - Concluir um carrinho\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.be.an(\"object\");\r",
+							"    pm.expect(jsonData).to.have.property(\"message\").that.is.a(\"string\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "{{token}}",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/carrinhos/concluir-compra",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"carrinhos",
+						"concluir-compra"
+					]
+				},
+				"description": "Não é permitido excluir usuário com carrinho."
+			},
+			"response": [
+				{
+					"name": "Registro excluído com sucesso | Nenhum registro excluído",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "/localhost:3000/usuarios/:_id",
+							"path": [
+								"localhost:3000",
+								"usuarios",
+								":_id"
+							],
+							"variable": [
+								{
+									"key": "_id"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n  \"message\": \"<string>\"\n}"
+				},
+				{
+					"name": "Usuário com carrinho cadastrado",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/usuarios/:_id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"usuarios",
+								":_id"
+							],
+							"variable": [
+								{
+									"key": "_id"
+								}
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n  \"message\": \"<string>\",\n  \"idCarrinho\": \"<string>\"\n}"
+				}
+			]
+		}
+	]
+}

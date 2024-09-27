@@ -1,0 +1,304 @@
+{
+	"info": {
+		"_postman_id": "8c837598-0ee8-46ab-b674-35a98b1c4ce3",
+		"name": "Testes de Desempenho e Carga",
+		"description": "**O ServeRest é uma API REST gratuita que simula uma loja virtual com intuito de servir de material de estudos de testes de API.**\n\nEstes testes visam medir o tempo de resposta, escalabilidade e comportamento da API sob diferentes níveis de carga e estresse.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38510210"
+	},
+	"item": [
+		{
+			"name": "Listar usuarios",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code é 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Validação da estrutura de resposta - Listagem de Usuários\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.be.an(\"object\");",
+							"    pm.expect(jsonData).to.have.property(\"quantidade\").that.is.a(\"number\");",
+							"    pm.expect(jsonData).to.have.property(\"usuarios\").that.is.an(\"array\");",
+							"    ",
+							"    jsonData.usuarios.forEach(function(usuario) {",
+							"        pm.expect(usuario).to.be.an(\"object\");",
+							"        pm.expect(usuario).to.have.property(\"nome\").that.is.a(\"string\");",
+							"        pm.expect(usuario.administrador).to.satisfy(val => val === \"true\" || val === \"false\");",
+							"        pm.expect(usuario).to.have.property(\"email\").that.is.a(\"string\");",
+							"        pm.expect(usuario).to.have.property(\"password\").that.is.a(\"string\");",
+							"        pm.expect(usuario).to.have.property(\"_id\").that.is.a(\"string\");",
+							"    });",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/usuarios",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"usuarios"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Listar carrinhos",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code é 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validação da estrutura de resposta - Listagem de carrinhos\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property(\"quantidade\").that.is.a(\"number\");\r",
+							"    pm.expect(jsonData).to.be.an(\"object\");\r",
+							"    pm.expect(jsonData).to.have.property(\"carrinhos\").that.is.an(\"array\");\r",
+							"    pm.expect(jsonData.carrinhos).to.have.property(\"produtos\").that.is.an(\"array\");  \r",
+							"\r",
+							"    jsonData.carrinhos.forEach(function (carrinho) {\r",
+							"        pm.expect(carrinho).to.have.property(\"produtos\").that.is.an(\"array\");\r",
+							"        pm.expect(carrinho).to.have.property(\"precoTotal\").that.is.a(\"number\");\r",
+							"        pm.expect(carrinho).to.have.property(\"quantidadeTotal\").that.is.a(\"number\");\r",
+							"        pm.expect(carrinho).to.have.property(\"idUsuario\").that.is.a(\"string\");\r",
+							"        pm.expect(carrinho).to.have.property(\"_id\").that.is.a(\"string\");\r",
+							"        \r",
+							"        // Validar cada objeto de produto dentro de 'produtos'\r",
+							"        carrinho.produtos.forEach(function (produto) {\r",
+							"            pm.expect(produto).to.have.property(\"idProduto\").that.is.a(\"string\");\r",
+							"            pm.expect(produto).to.have.property(\"quantidade\").that.is.a(\"number\");\r",
+							"            pm.expect(produto).to.have.property(\"precoUnitario\").that.is.a(\"number\");\r",
+							"        });\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/carrinhos",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"carrinhos"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Lista de produtos",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/produtos?_id=<string>&nome=<string>&preco=<integer>&descricao=<string>&quantidade=<integer>",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"produtos"
+							],
+							"query": [
+								{
+									"key": "_id",
+									"value": "<string>"
+								},
+								{
+									"key": "nome",
+									"value": "<string>"
+								},
+								{
+									"key": "preco",
+									"value": "<integer>"
+								},
+								{
+									"key": "descricao",
+									"value": "<string>"
+								},
+								{
+									"key": "quantidade",
+									"value": "<integer>"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n  \"quantidade\": \"<number>\",\n  \"produtos\": [\n    {\n      \"nome\": \"<string>\",\n      \"preco\": \"<integer>\",\n      \"descricao\": \"<string>\",\n      \"quantidade\": \"<integer>\",\n      \"_id\": \"<string>\"\n    },\n    {\n      \"nome\": \"<string>\",\n      \"preco\": \"<integer>\",\n      \"descricao\": \"<string>\",\n      \"quantidade\": \"<integer>\",\n      \"_id\": \"<string>\"\n    }\n  ]\n}"
+				}
+			]
+		},
+		{
+			"name": "Listar carrinho _id",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code é 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validação da estrutura de resposta - Carrinho por _id\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property(\"quantidade\").that.is.a(\"number\");\r",
+							"    pm.expect(jsonData).to.be.an(\"object\");\r",
+							"    pm.expect(jsonData).to.have.property(\"produtos\").that.is.an(\"array\");\r",
+							"    pm.expect(jsonData).to.have.property(\"quantidadeTotal\").that.is.a(\"number\");\r",
+							"    pm.expect(jsonData).to.have.property(\"precoTotal\").that.is.a(\"number\");\r",
+							"    pm.expect(jsonData).to.have.property(\"_id\").that.is.a(\"string\");\r",
+							"    pm.expect(jsonData).to.have.property(\"idUsuario\").that.is.a(\"string\");\r",
+							"    \r",
+							"    jsonData.produtos.forEach(function(produto) { \r",
+							"        pm.expect(produto).to.be.an(\"object\");\r",
+							"        pm.expect(produto).to.have.property(\"idProduto\").that.is.a(\"string\");\r",
+							"        pm.expect(produto).to.have.property(\"quantidade\").that.is.a(\"number\");\r",
+							"        pm.expect(produto).to.have.property(\"precoUnitario\").that.is.a(\"number\");   \r",
+							"    });\r",
+							"\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/carrinhos/{{idCarrinho}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"carrinhos",
+						"{{idCarrinho}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Lista de produtos",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/produtos?_id=<string>&nome=<string>&preco=<integer>&descricao=<string>&quantidade=<integer>",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"produtos"
+							],
+							"query": [
+								{
+									"key": "_id",
+									"value": "<string>"
+								},
+								{
+									"key": "nome",
+									"value": "<string>"
+								},
+								{
+									"key": "preco",
+									"value": "<integer>"
+								},
+								{
+									"key": "descricao",
+									"value": "<string>"
+								},
+								{
+									"key": "quantidade",
+									"value": "<integer>"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n  \"quantidade\": \"<number>\",\n  \"produtos\": [\n    {\n      \"nome\": \"<string>\",\n      \"preco\": \"<integer>\",\n      \"descricao\": \"<string>\",\n      \"quantidade\": \"<integer>\",\n      \"_id\": \"<string>\"\n    },\n    {\n      \"nome\": \"<string>\",\n      \"preco\": \"<integer>\",\n      \"descricao\": \"<string>\",\n      \"quantidade\": \"<integer>\",\n      \"_id\": \"<string>\"\n    }\n  ]\n}"
+				}
+			]
+		}
+	]
+}
